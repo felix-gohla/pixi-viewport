@@ -126,7 +126,8 @@ interface WheelOptions
     center?: PIXI.Point
     smooth?: number
     interrupt?: boolean
-    lineHeight?: number
+    lineHeight?: number,
+    trackpadOnly?: boolean,
 }
 
 interface ClampZoomOptions

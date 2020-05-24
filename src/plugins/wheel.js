@@ -17,7 +17,8 @@ const wheelOptions = {
     interrupt: true,
     reverse: false,
     center: null,
-    lineHeight: 20
+    lineHeight: 20,
+    trackpadOnly: false,
 }
 
 export class Wheel extends Plugin
@@ -82,7 +83,7 @@ export class Wheel extends Plugin
 
     wheel(e)
     {
-        if (this.paused)
+        if (this.paused || (this.options.trackpadOnly && !e.ctrlKey))
         {
             return
         }
