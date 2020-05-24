@@ -577,7 +577,7 @@ class Plugin
  * @typedef DragOptions
  * @property {string} [direction=all] direction to drag
  * @property {boolean} [pressDrag=true] whether click to drag is active
- * @property {boolean} [wheel=true] use wheel to scroll in direction (unless wheel plugin is active)
+ * @property {boolean} [wheel=false] use wheel to scroll in direction
  * @property {number} [wheelScroll=1] number of pixels to scroll with each wheel spin
  * @property {boolean} [reverse] reverse the direction of the wheel scroll
  * @property {(boolean|string)} [clampWheel=false] clamp wheel(to avoid weird bounce with mouse wheel)
@@ -591,7 +591,7 @@ class Plugin
 const dragOptions = {
     direction: 'all',
     pressDrag: true,
-    wheel: true,
+    wheel: false,
     wheelScroll: 1,
     reverse: false,
     clampWheel: false,
@@ -830,29 +830,25 @@ class Drag extends Plugin
 
         if (this.options.wheel)
         {
-            const wheel = this.parent.plugins.get('wheel');
-            if (!wheel)
+            if (this.xDirection)
             {
-                if (this.xDirection)
-                {
-                    this.parent.x += event.deltaX * this.options.wheelScroll * this.reverse;
-                }
-                if (this.yDirection)
-                {
-                    this.parent.y += event.deltaY * this.options.wheelScroll * this.reverse;
-                }
-                if (this.options.clampWheel)
-                {
-                    this.clamp();
-                }
-                this.parent.emit('wheel-scroll', this.parent);
-                this.parent.emit('moved', { viewport: this.parent, type: 'wheel' });
-                if (!this.parent.options.passiveWheel)
-                {
-                    event.preventDefault();
-                }
-                return true
+                this.parent.x += event.deltaX * this.options.wheelScroll * this.reverse;
             }
+            if (this.yDirection)
+            {
+                this.parent.y += event.deltaY * this.options.wheelScroll * this.reverse;
+            }
+            if (this.options.clampWheel)
+            {
+                this.clamp();
+            }
+            this.parent.emit('wheel-scroll', this.parent);
+            this.parent.emit('moved', { viewport: this.parent, type: 'wheel' });
+            if (!this.parent.options.passiveWheel)
+            {
+                event.preventDefault();
+            }
+            return true
         }
     }
 
